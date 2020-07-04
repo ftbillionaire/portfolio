@@ -1,0 +1,24 @@
+{% extends 'base.html'%}
+
+{% block title %}
+  {{post.title}} - {{block.super}}
+{% endblock %}
+
+{% block content %}
+  <h1>{{post.title}}</h1>
+
+  {% if post.image %}
+		<img class="card-img-top" src="{{ post.image.url }}" style="height: 200px; width: 200px;">
+	{% endif %}
+
+  <p>{{post.body}}</p>
+  <h4>Tags:
+    {% if post.tags.all %}
+      {% for tag in post.tags.all%}
+        <a style="text-decoration: none; color: #6d6d6d" href="{{tag.get_absolute_url}}">{{tag}}</a>
+      {% endfor %}
+    {% else %}
+      This post doesn't contain any tags
+    {% endif %}
+  </h4>
+{% endblock %}
