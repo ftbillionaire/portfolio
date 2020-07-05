@@ -34,12 +34,14 @@ class Tag(models.Model):
         ordering = ['title']
 
 class Comment(models.Model):
-    name = models.CharField(max_length = 100, db_index = True)
-    body = models.TextField(db_index = True)
+    name = models.CharField(max_length = 30, db_index = True)
+    body = models.TextField()
+    post = models.ForeignKey('Post', on_delete = models.CASCADE, related_name = 'comments')
     date_pub = models.DateField(auto_now_add = True)
+    active = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.name
+        return "Comment {} by {}".format(self.body, self.name)
 
     class Meta:
-        ordering = ['-date_pub']
+        ordering = ['-id']

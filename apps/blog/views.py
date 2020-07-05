@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.db.models import Q
 
-from .models import Post, Tag
+from .models import *
 from .forms import *
 # Create your views here.
 class MainPage(View):
@@ -48,7 +48,18 @@ def tags_list(request):
 
 def post_detail(request, slug):
     post = Post.objects.get(slug__iexact=slug)
-    return render(request, 'blog/post_detail.html', {'post':post})
+    comments = post.comments.filter(active=True)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            new_comment = form.save(commit=False)
+            new_comment.post = post
+            new_comment.active = True
+            new_comment.save()
+            return redirect('post_detail_url', slug=post.slug)
+    else:
+        form = CommentForm()
+    return render(request, 'blog/post_detail.html', {'post':post, 'comments': comments, 'form': form})
 
 def tag_detail(request, slug):
     tag = Tag.objects.get(slug__iexact=slug)
@@ -59,8 +70,3 @@ def tag_detail(request, slug):
     page = paginator.get_page(page_num)
 
     return render(request, 'blog/tag_detail.html', {'tag':tag, 'page_obj':page})
-
-def search_query(request):
-    query = request.GET.get('search_q')
-    posts = Post.objects.filter(Q(title = query) | Q(body = query))
-    return render(request, 'blog/posts_list.html', {'posts':posts})
