@@ -15,6 +15,3 @@ class TagInfo(admin.ModelAdmin):
 class CommentInfo(admin.ModelAdmin):
     list_display = ('name', 'date_pub', 'post', 'active')
     list_filter = ('name', 'date_pub', 'post', 'active')
-
-    def approve_comments(self, request, queryset):
-        queryset.update(active=True)
