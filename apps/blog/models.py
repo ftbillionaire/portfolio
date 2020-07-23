@@ -10,7 +10,7 @@ def gen_slug(model_title, model_name):
     return new_slug + '-' + model_name + '-' + str(int(time()))
 
 class Post(models.Model):
-    title = models.CharField(max_length = 150, db_index =True)
+    title = models.CharField(max_length = 150, db_index =True, unique = True)
     slug = models.SlugField(max_length = 100, blank=True, unique = True)
     body = models.TextField(blank = True, db_index = True)
     image = models.ImageField(upload_to = 'images', blank = True)

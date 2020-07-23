@@ -4,9 +4,11 @@ from apps.blog.models import *
 
 class TestPostModel(TestCase):
     def setUpTestData():
-        post = Post.objects.create(title = 'Post', slug = 'post-sl')
-        print(post.title)
+        Post.objects.create(title = 'Post')
+        print('.')
+        print('Post was created!')
 
     def test_post_get_absolute_url(self):
         post = Post.objects.get(title = 'Post')
-        self.assertEqual(post.get_absolute_url(), '/posts/post-sl/')
+        slug_end = post.slug[-10:-1] + post.slug[-1]
+        self.assertEqual(post.get_absolute_url(), '/posts/post-post-{}/'.format(slug_end))
