@@ -4,12 +4,14 @@ from django.views.generic import View
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.db.models import Q
+from bs4 import BeautifulSoup
+import requests
 
 from .models import *
 from .forms import *
 # Create your views here.
 class MainPage(View):
-    def send_us(request):
+    def send_us_parse(request):
         if request.method == 'POST':
             form = MailForm(request.POST)
             if form.is_valid():
@@ -22,7 +24,18 @@ class MainPage(View):
                 return render(request, 'blog/success.html')
         else:
             form = MailForm()
-        return render(request, 'blog/main_page.html', {'form':form})
+
+        url = "https://www.worldometers.info/coronavirus/"
+        page = requests.get(url)
+        soup = BeautifulSoup(page.text, "html.parser")
+        stats = []
+        new_stats = []
+        stats = soup.findAll('div', class_ = "maincounter-number")
+        article = ["Cases", "Deaths", "Recovered"]
+        for i in range(len(stats)):
+            new_stats.append(stats[i].text)
+        return render(request, 'blog/main_page.html', {'form':form, 'stats':new_stats, 'article':article})
+
 
     def main_page(request):
         return render(request, 'blog/main_page.html')
@@ -34,8 +47,8 @@ def posts_list(request):
         posts = Post.objects.filter(Q(title__icontains = search_q) | Q(body__icontains = search_q))
     else:
         posts = Post.objects.all()
-    # Pagination
 
+    # Pagination
     paginator = Paginator(posts, 5)
     page_num = request.GET.get('page', 1)
     page = paginator.get_page(page_num)
