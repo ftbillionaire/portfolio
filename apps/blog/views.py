@@ -10,8 +10,13 @@ import requests
 from .models import *
 from .forms import *
 # Create your views here.
+
+def auth_menu(request):
+    form = CreateUserForm()
+    return render(request, 'auth/sign_up.html', {'form':form})
+
 class MainPage(View):
-    def send_us_parse(request):
+    def main_page(request):
         if request.method == 'POST':
             form = MailForm(request.POST)
             if form.is_valid():
@@ -35,10 +40,6 @@ class MainPage(View):
         for i in range(len(stats)):
             new_stats.append(stats[i].text)
         return render(request, 'blog/main_page.html', {'form':form, 'stats':new_stats, 'article':article})
-
-
-    def main_page(request):
-        return render(request, 'blog/main_page.html')
 
 def posts_list(request):
     search_query = request.GET.get('search', '')

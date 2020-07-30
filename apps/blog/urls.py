@@ -2,8 +2,8 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('', MainPage.send_us_parse),
     path('', MainPage.main_page, name = 'main_page_url'),
+    path('sign_up/', auth_menu),
     path('posts/', posts_list, name = 'posts_list_url'),
     path('tags/', tags_list, name = 'tags_list_url'),
     path('posts/<str:slug>/', post_detail, name = 'post_detail_url'),
