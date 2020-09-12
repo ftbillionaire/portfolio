@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'apps.blog',
 ]
 
@@ -70,8 +71,13 @@ TEMPLATES = [
     },
 ]
 
+# AUTH_USER_MODEL = 'blog.CreateUser'
 WSGI_APPLICATION = 'pfolio.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5 
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -125,7 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Media files
 

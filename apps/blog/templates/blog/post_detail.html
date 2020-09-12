@@ -23,14 +23,14 @@
   </h4>
 
   <h4 class="mt-5">Comments:</h4>
-  <form method = "post">
+  <form id="comment-form" method = "POST">
     {% csrf_token %}
-    {% for field in form %}
-      {{field.label}}
-      {{field}}
-    {% endfor %}
+    {{form.as_p}}
     <button type="submit" class="btn btn-primary">Comment</button>
-      {% for comment in comments %}
+  </form>
+
+  {% for comment in comments %}
+    <div id="comment-block">
         <div class="mt-3 mb-3 card">
           <div class="card-header">
             {{ comment.date_pub }}
@@ -42,6 +42,6 @@
             </blockquote>
           </div>
         </div>
-      {% endfor %}
-  </form>
+    </div>
+  {% endfor %}
 {% endblock %}
